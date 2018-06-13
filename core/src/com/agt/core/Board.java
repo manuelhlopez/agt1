@@ -66,7 +66,7 @@ public class Board  {
 	 * @param x en que posicion x del tablero se coloca el centro de la carta (inicia en 0)
 	 * @param y en que posicion y del tablero se coloca el centro de la carta (inicia en 0)
 	 */
-	public void drawCard(Card card, int x, int y) {
+	public void setCard(Card card, int x, int y) {
 		
 		int[][] areaCard = card.area;
 		
@@ -100,6 +100,14 @@ public class Board  {
 			ytemp = -1;
 		}
 		
-		return new Vector2(xtemp, ytemp);
+		return new Vector2(xtemp, (area.length-1)-ytemp);
+	}
+	
+	public void clearBoard() {
+		for (int j=0;j<area.length;j++) {
+			for (int i=0;i<area[0].length;i++) {
+				area[j][i] = 0; 
+			}
+		}
 	}
 }

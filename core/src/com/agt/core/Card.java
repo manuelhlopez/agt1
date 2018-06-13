@@ -6,6 +6,7 @@ public class Card {
 
 	public int[][] area;
 	public Vector2 center;
+	public int type;
 	
 	public static int[][] TYPE_1 =  {
 			{0,0,1,0,0},
@@ -35,6 +36,7 @@ public class Card {
 			};
 	
 	public Card(int type) {
+		this.type = type;
 		if (type == 1) {
 			center = new Vector2(2, 2);
 			area = Card.TYPE_1;
