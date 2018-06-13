@@ -12,15 +12,20 @@ public class MyDeck {
 	private ArrayList<Card> cardList;
 	public Card currentCard;
 	public int cellSize;
+	public int width;
+	public int height;
 	
 	public MyDeck() {
 		cardList = new ArrayList<Card>();
 		currentCard = null;
-		cellSize = 16;
+		cellSize = 32;
+		this.height = cellSize;
+		this.width = 0;
 	}
 	
 	public void addCard(Card c) {
 		cardList.add(c);
+		this.width += cellSize; 
 	}
 	
 	public void draw(ShapeRenderer sr) {
@@ -40,11 +45,13 @@ public class MyDeck {
 	}
 	
 	public void selectCard(int x, int y) {
-		int total = (cardList.size()*cellSize);
+		if (x > this.width || y > this.height)
+			return;
+		
 		int card = x/cellSize;
-		System.out.println("card:  " + card);
-		this.currentCard = cardList.get(card);
-		System.out.println(this.currentCard.type);
+		if (card < cardList.size()) {
+			this.currentCard = cardList.get(card);
+		}
 	}
 	
 }

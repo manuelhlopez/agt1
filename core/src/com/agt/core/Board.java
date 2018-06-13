@@ -88,7 +88,7 @@ public class Board  {
 	 * @param x posicion x donde se hizo click
 	 * @param y posicion y donde se hizo click
 	 * @return retorna un Vector2, que tiene x y y que denotan
-	 * las coordenadas del board.
+	 * las celdas del board.
 	 */
 	public Vector2 getCell(int x, int y) {
 		int xtemp = (x-position.x)/cellSize;
