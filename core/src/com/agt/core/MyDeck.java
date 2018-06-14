@@ -1,7 +1,5 @@
 package com.agt.core;
 
-import java.util.ArrayList;
-
 import com.agt.utils.Vector2;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -60,6 +58,7 @@ public class MyDeck {
 	public void deleteCard() {
 		if (this.currentCard != null && this.currentCardInt != -1) {
 			cardList[this.currentCardInt] = null;
+			this.currentCard = null;
 		}
 	}
 	
