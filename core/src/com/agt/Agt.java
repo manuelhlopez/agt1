@@ -22,7 +22,7 @@ public class Agt extends ApplicationAdapter {
 
 	@Override
 	public void render () {
-		Gdx.gl.glClearColor(0.2f,0.2f,0.2f, 1);
+		Gdx.gl.glClearColor(0.61f, 0.76f, 0.90f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
 		game.update();

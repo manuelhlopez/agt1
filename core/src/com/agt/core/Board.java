@@ -6,8 +6,11 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
 public class Board  {
+	public static int CELL_SIZE = 16;
 	public Vector2 position;
 	public int  cellSize;
+	public int width;
+	public int height;
 	
 	//area.length es Y
 	//area[0].length es X
@@ -30,11 +33,14 @@ public class Board  {
 	 */
 	public Board(int x, int y) {
 		position = new Vector2(x,y);
-		cellSize = 16;
+		cellSize = CELL_SIZE;
+		this.width = area[0].length;
+		this.height = area.length;
+		
 	}
 	public Board() {
 		position = new Vector2();
-		cellSize = 16;
+		cellSize = CELL_SIZE;
 	}
 	/**
 	 * Dibuja el board con dibujos de cuadrados.
@@ -42,17 +48,17 @@ public class Board  {
 	 */
 	public void draw(ShapeRenderer shapeRenderer) {
 
-		for (int j=0;j<area.length;j++) {
-			for (int i=0;i<area[0].length;i++) {
+		for (int j=0;j<this.height;j++) {
+			for (int i=0;i<this.width;i++) {
 				
-				if (area[area.length-1-j][i] == 1) {
-					shapeRenderer.setColor(Color.GREEN);
-					shapeRenderer.begin(ShapeType.Filled);					
+				if (area[this.height-1-j][i] == 1) {
+					shapeRenderer.setColor(new Color(0.62f, 0.89f, 0.66f, 1));
+					shapeRenderer.begin(ShapeType.Filled);
+					shapeRenderer.rect(position.x + (i*cellSize), position.y + (j*cellSize), cellSize, cellSize);
+					shapeRenderer.end();
 				}
-				else {
-					shapeRenderer.setColor(Color.WHITE);
-					shapeRenderer.begin(ShapeType.Line);										
-				}
+				shapeRenderer.setColor(new Color(0.26f, 0.44f, 0.61f, 1));
+				shapeRenderer.begin(ShapeType.Line);
 				shapeRenderer.rect(position.x + (i*cellSize), position.y + (j*cellSize), cellSize, cellSize);
 				shapeRenderer.end();
 			}
@@ -85,22 +91,28 @@ public class Board  {
 	}
 	/**
 	 * Devuelve la celda del board donde se hizo click
-	 * @param x posicion x donde se hizo click
-	 * @param y posicion y donde se hizo click
+	 * @param xglobal posicion x donde se hizo click
+	 * @param yglobal posicion y donde se hizo click
 	 * @return retorna un Vector2, que tiene x y y que denotan
 	 * las celdas del board.
 	 */
-	public Vector2 getCell(int x, int y) {
-		int xtemp = (x-position.x)/cellSize;
-		int ytemp = (y-position.y)/cellSize;
-		if (xtemp < 0 || xtemp >= area[0].length) {
+	public Vector2 getCell(int xglobal, int yglobal) {
+		int xtemp = (xglobal-position.x);
+		if (xtemp<0) xtemp = -1;
+		else xtemp = xtemp/cellSize;
+		
+		int ytemp = (yglobal-position.y);
+		if (ytemp<0) ytemp = -1;
+		else ytemp = ytemp/cellSize;
+		
+		if (xtemp < 0 || xtemp >= this.width) {
 			xtemp = -1;
 		}
-		if (ytemp < 0 || ytemp >= area.length) {
+		if (ytemp < 0 || ytemp >= this.height) {
 			ytemp = -1;
 		}
 		
-		return new Vector2(xtemp, (area.length-1)-ytemp);
+		return new Vector2(xtemp, (ytemp == -1)? -1 : (this.height)-ytemp-1);
 	}
 	
 	public void clearBoard() {
