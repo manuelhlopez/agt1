@@ -3,54 +3,84 @@ package com.agt.core;
 import java.util.ArrayList;
 
 import com.agt.utils.Vector2;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class MyDeck {
 	public Vector2 position;
-	private ArrayList<Card> cardList;
+	private Card[] cardList;
 	public Card currentCard;
+	public int currentCardInt;
 	public int cellSize;
 	public int width;
 	public int height;
 	
+	private int index;
+
 	public MyDeck() {
-		cardList = new ArrayList<Card>();
+		cardList = new Card[5];
 		currentCard = null;
+		currentCardInt = -1;
 		cellSize = 32;
 		this.height = cellSize;
 		this.width = 0;
+		index= 0;
 	}
 	
 	public void addCard(Card c) {
-		cardList.add(c);
+		c.setScale(3);
+		cardList[index] = c;
+		index++;
 		this.width += cellSize; 
+		this.height = cellSize;
 	}
 	
-	public void draw(ShapeRenderer sr) {
+	public void draw(SpriteBatch batch) {
 		
-		for (int i=0;i<cardList.size();i++) {
+		for (int i=0;i<cardList.length;i++) {
 			
-			sr.begin(ShapeType.Filled);
+			/*sr.begin(ShapeType.Filled);
 			if (cardList.get(i).type == 1) sr.setColor(Color.WHITE);
 			if (cardList.get(i).type == 2) sr.setColor(Color.BLUE);
 			if (cardList.get(i).type == 3) sr.setColor(Color.GREEN);
-			if (cardList.get(i).type == 4) sr.setColor(Color.CORAL);
+			if (cardList.get(i).type == 4) sr.setColor(Color.CORAL);*/
 			
+			Card card = cardList[i];
+			if (card != null) {
+				batch.begin();
+				card.setPosition(position.x + (i*cellSize) + (i*3), position.y);
+				card.draw(batch);
+				batch.end();
+			}
 //			sr.rect(position.x + (i*cellSize) + (i*3), position.y, cellSize, cellSize);
-			sr.rect(position.x + (i*cellSize), position.y, cellSize, cellSize);
-			sr.end();
+			/*sr.rect(position.x + (i*cellSize), position.y, cellSize, cellSize);
+			sr.end();*/
 		}
 	}
 	
-	public void selectCard(int x, int y) {
-		if (x > this.width || y > this.height)
-			return;
+	public void deleteCard() {
+		if (this.currentCard != null && this.currentCardInt != -1) {
+			cardList[this.currentCardInt] = null;
+		}
+	}
+	
+	public void selectCard(int xglobal, int yglobal) {
 		
-		int card = x/cellSize;
-		if (card < cardList.size()) {
-			this.currentCard = cardList.get(card);
+		int xtemp = (xglobal-position.x);
+		if (xtemp<0) xtemp = -1;
+		else xtemp = xtemp/cellSize;
+
+		int ytemp = (yglobal-position.y);
+		
+		if (xtemp < 0 || xtemp >= this.width) {
+			xtemp = -1;
+		}
+		if (ytemp < 0 || ytemp >= this.height) {
+			ytemp = -1;
+		}
+
+		if (xtemp != -1 && ytemp != -1 && xtemp < this.cardList.length) {
+			this.currentCard = this.cardList[xtemp];
+			this.currentCardInt = xtemp;
 		}
 	}
 	

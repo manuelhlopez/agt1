@@ -1,6 +1,7 @@
 package com.agt.core;
 
 import com.agt.utils.Vector2;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
@@ -57,6 +58,7 @@ public class Board  {
 					shapeRenderer.rect(position.x + (i*cellSize), position.y + (j*cellSize), cellSize, cellSize);
 					shapeRenderer.end();
 				}
+				Gdx.gl.glLineWidth(3);
 				shapeRenderer.setColor(new Color(0.26f, 0.44f, 0.61f, 1));
 				shapeRenderer.begin(ShapeType.Line);
 				shapeRenderer.rect(position.x + (i*cellSize), position.y + (j*cellSize), cellSize, cellSize);
@@ -97,6 +99,7 @@ public class Board  {
 	 * las celdas del board.
 	 */
 	public Vector2 getCell(int xglobal, int yglobal) {
+		
 		int xtemp = (xglobal-position.x);
 		if (xtemp<0) xtemp = -1;
 		else xtemp = xtemp/cellSize;
@@ -111,10 +114,22 @@ public class Board  {
 		if (ytemp < 0 || ytemp >= this.height) {
 			ytemp = -1;
 		}
-		
+		this.getGlobalPosition(xtemp, ytemp);
 		return new Vector2(xtemp, (ytemp == -1)? -1 : (this.height)-ytemp-1);
 	}
-	
+	/**
+	 * Esta funcion devuelve las coordenadas de pantalla cuando se ingresa una
+	 * coordenada de tablero (esquina inferior izquierda
+	 * @param x coordenada de tablero x
+	 * @param y coordenada de tabler y
+	 * @return Retorna un vector2 con las coordenadas de pantalla.
+	 */
+	public Vector2 getGlobalPosition(int x, int y) {
+		int xtemp = (x * cellSize) + position.x;
+		int ytemp = Gdx.graphics.getHeight() - ((y * cellSize) + position.y) + cellSize;
+		
+		return new Vector2(xtemp, ytemp);
+	}
 	public void clearBoard() {
 		for (int j=0;j<area.length;j++) {
 			for (int i=0;i<area[0].length;i++) {

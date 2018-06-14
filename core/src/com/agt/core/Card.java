@@ -1,8 +1,10 @@
 package com.agt.core;
 
 import com.agt.utils.Vector2;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 
-public class Card {
+public class Card extends Sprite {
 
 	public int[][] area;
 	public Vector2 center;
@@ -35,7 +37,8 @@ public class Card {
 			{0,1,0}
 			};
 	
-	public Card(int type) {
+	public Card(Texture texture, int type) {
+		super(texture);
 		this.type = type;
 		if (type == 1) {
 			center = new Vector2(2, 2);
@@ -53,5 +56,6 @@ public class Card {
 			center = new Vector2(1, 2);
 			area = Card.TYPE_4;
 		}
+		
 	}
 }
