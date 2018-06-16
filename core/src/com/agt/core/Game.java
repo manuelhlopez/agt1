@@ -3,12 +3,11 @@ package com.agt.core;
 import java.util.ArrayList;
 
 import com.agt.actors.Soldier;
-import com.agt.utils.Vector2;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector2;
 
 public class Game {
 
@@ -48,6 +47,14 @@ public class Game {
 		myDeck.addCard(new Card(new Texture("card4.png"),4));
 		myDeck.addCard(new Card(new Texture("card1.png"),1));
 		
+		this.createCharacters();
+		
+	}
+	
+	/**
+	 * Crea los personajes que se muestran en el tablero.
+	 */
+	private void createCharacters() {
 		//soldado 1
 		Vector2 pos = board.getGlobalPosition(5, 5);
 		Soldier soldier = new Soldier(new Texture("soldier.png"));
@@ -60,9 +67,11 @@ public class Game {
 		soldier2.setPosition(pos.x, pos.y);
 		soldier2.setScale(2);
 		soldierList.add(soldier2);
-		
 	}
 	
+	/**
+	 * Este metodo se ejecuta constantemente.
+	 */
 	public void update() {
 		
 		if (Gdx.input.justTouched()) {
@@ -73,8 +82,8 @@ public class Game {
 				for (Soldier soldier : soldierList) {
 					if (soldier.getBoundingRectangle().contains(xglobal, yglobal)) {
 						this.currentSoldier = soldier;
-						Vector2 v = board.getCell((int)this.currentSoldier.getX(), (int)this.currentSoldier.getY());
-						board.area[v.y][v.x] = 1;
+						Vector2 cellPosition = board.getCell((int)this.currentSoldier.getX(), (int)this.currentSoldier.getY());
+						board.area[(int)cellPosition.y][(int)cellPosition.x] = 1;
 						status = Game.STATUS_SELECTED_PLAYER;
 						break;
 					}
@@ -85,14 +94,14 @@ public class Game {
 			}
 			else if (status == Game.STATUS_SELECTED_CARD) {
 				this.selectCard(xglobal, yglobal);
-				Vector2 vec = board.getCell(xglobal, yglobal);
-				if (vec.x != -1 && vec.y != -1) {
-					if (board.area[vec.y][vec.x] == 1) {
+				Vector2 cellPosition = board.getCell(xglobal, yglobal);
+				if (cellPosition.x != -1 && cellPosition.y != -1) {
+					if (board.area[(int)cellPosition.y][(int)cellPosition.x] == 1) {
 						
-						Vector2 v = board.getCell((int)this.currentSoldier.getX(), (int)this.currentSoldier.getY());
-						board.area[v.y][v.x] = 0;
+						Vector2 cellPosition2 = board.getCell((int)this.currentSoldier.getX(), (int)this.currentSoldier.getY());
+						board.area[(int)cellPosition2.y][(int)cellPosition2.x] = 0;
 						
-						Vector2 pos = board.getGlobalPosition(vec.x, vec.y);
+						Vector2 pos = board.getGlobalPosition((int)cellPosition.x, (int)cellPosition.y);
 						this.currentSoldier.setPosition(pos.x, pos.y);
 						this.currentSoldier.setScale(2);
 						board.clearBoard();
@@ -101,14 +110,11 @@ public class Game {
 					}
 				}
 			}
-			//}
-		}
-		if (Gdx.input.isKeyJustPressed(Keys.A)) {
-			board.clearBoard();
 		}
 		
-		board.draw(shapeRenderer);
-		myDeck.draw(batch);
+		//Dibuja todo en la pantalla.
+		board.draw(batch, shapeRenderer);
+		myDeck.draw(batch, shapeRenderer);
 		batch.begin();
 		for (Soldier soldier : soldierList) {			
 			soldier.draw(batch);
@@ -116,13 +122,19 @@ public class Game {
 		batch.end();
 	}
 	
+	/**
+	 * Este metodo hace que se seleccione la carta en el deck y 
+	 * se dibuje en el tablero
+	 * @param xglobal coordenadas 
+	 * @param yglobal
+	 */
 	public void selectCard(int xglobal, int yglobal) {
 		myDeck.selectCard(xglobal, yglobal);
 		if (myDeck.currentCard != null) {
-			Vector2 vec = board.getCell((int)this.currentSoldier.getX(), (int)this.currentSoldier.getY());
+			Vector2 cellPosition = board.getCell((int)this.currentSoldier.getX(), (int)this.currentSoldier.getY());
 			Card c = myDeck.currentCard;
 			board.clearBoard();
-			board.setCard(c, vec.x, vec.y);
+			board.drawCard(c, (int)cellPosition.x, (int)cellPosition.y);
 			status = Game.STATUS_SELECTED_CARD;
 		}
 	}

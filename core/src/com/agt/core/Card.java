@@ -1,8 +1,8 @@
 package com.agt.core;
 
-import com.agt.utils.Vector2;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Vector2;
 
 public class Card extends Sprite {
 

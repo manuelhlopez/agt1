@@ -1,7 +1,8 @@
 package com.agt.core;
 
-import com.agt.utils.Vector2;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector2;
 
 public class MyDeck {
 	public Vector2 position;
@@ -32,7 +33,7 @@ public class MyDeck {
 		this.height = cellSize;
 	}
 	
-	public void draw(SpriteBatch batch) {
+	public void draw(SpriteBatch batch, ShapeRenderer shapeRenderer) {
 		
 		for (int i=0;i<cardList.length;i++) {
 			
@@ -64,11 +65,11 @@ public class MyDeck {
 	
 	public void selectCard(int xglobal, int yglobal) {
 		
-		int xtemp = (xglobal-position.x);
+		int xtemp = (xglobal-(int)position.x);
 		if (xtemp<0) xtemp = -1;
 		else xtemp = xtemp/cellSize;
 
-		int ytemp = (yglobal-position.y);
+		int ytemp = (yglobal-(int)position.y);
 		
 		if (xtemp < 0 || xtemp >= this.width) {
 			xtemp = -1;

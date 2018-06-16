@@ -1,10 +1,11 @@
 package com.agt.core;
 
-import com.agt.utils.Vector2;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.Vector2;
 
 public class Board  {
 	public static int CELL_SIZE = 16;
@@ -47,7 +48,7 @@ public class Board  {
 	 * Dibuja el board con dibujos de cuadrados.
 	 * @param shapeRenderer
 	 */
-	public void draw(ShapeRenderer shapeRenderer) {
+	public void draw(SpriteBatch batch, ShapeRenderer shapeRenderer) {
 
 		for (int j=0;j<this.height;j++) {
 			for (int i=0;i<this.width;i++) {
@@ -74,15 +75,15 @@ public class Board  {
 	 * @param x en que posicion x del tablero se coloca el centro de la carta (inicia en 0)
 	 * @param y en que posicion y del tablero se coloca el centro de la carta (inicia en 0)
 	 */
-	public void setCard(Card card, int x, int y) {
+	public void drawCard(Card card, int x, int y) {
 		
 		int[][] areaCard = card.area;
 		
 		for (int j=0;j<areaCard.length;j++) {
 			for (int i=0;i<areaCard[0].length;i++) {
 				if (areaCard[j][i] == 1) {
-					int yTemp = j + y - card.center.y;
-					int xTemp = i + x - card.center.x;
+					int yTemp = j + y - (int)card.center.y;
+					int xTemp = i + x - (int)card.center.x;
 					if ((xTemp >= 0 && xTemp < area[0].length) && (yTemp >= 0 && yTemp < area.length)) {						
 						area[yTemp][xTemp] = 1;
 					}
@@ -100,11 +101,11 @@ public class Board  {
 	 */
 	public Vector2 getCell(int xglobal, int yglobal) {
 		
-		int xtemp = (xglobal-position.x);
+		int xtemp = (xglobal-(int)position.x);
 		if (xtemp<0) xtemp = -1;
 		else xtemp = xtemp/cellSize;
 		
-		int ytemp = (yglobal-position.y);
+		int ytemp = (yglobal-(int)position.y);
 		if (ytemp<0) ytemp = -1;
 		else ytemp = ytemp/cellSize;
 		
@@ -125,8 +126,8 @@ public class Board  {
 	 * @return Retorna un vector2 con las coordenadas de pantalla.
 	 */
 	public Vector2 getGlobalPosition(int x, int y) {
-		int xtemp = (x * cellSize) + position.x;
-		int ytemp = Gdx.graphics.getHeight() - ((y * cellSize) + position.y) + cellSize;
+		int xtemp = (x * cellSize) + (int)position.x;
+		int ytemp = Gdx.graphics.getHeight() - ((y * cellSize) + (int)position.y) + cellSize;
 		
 		return new Vector2(xtemp, ytemp);
 	}
